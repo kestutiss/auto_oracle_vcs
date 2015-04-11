@@ -15,5 +15,7 @@ database = dict(
 #application predefined constants
 
 svncfg = dict(
-
+    USER = 'svn2',
+    PASSWD = '4a483A059Caba0lk',
+    WORK_PATH = '/home/ugnius/svn_moon/moon/' 
 )
