@@ -6,8 +6,10 @@ Created on 2014 gruod. 18
 import cx_Oracle as odb
 from DbObjDDL import DbObjDDL
 from PySVNGw import PySVNGw
-import os, sys
+import os
 import subprocess
+import difflib
+#from difflib_data import *
  
 import ConfigParser
 from logger import Logger
@@ -83,9 +85,15 @@ for row in rows['row']:
         
         file_object = open(svn_file_full_name, 'r')
         svn_sql_text = file_object.read()
-        if sql_text[sql_text.find('\n'):] != svn_sql_text[svn_sql_text.find('\n'):]:
-            # TODO print diff
-            logger.debug('not equal: %s',svn_file_full_name)
+        #if sql_text[sql_text.find('\n'):] != svn_sql_text[svn_sql_text.find('\n'):]:
+        # http://pymotw.com/2/difflib/
+               
+        s = difflib.SequenceMatcher(None, svn_sql_text, sql_text)
+       
+        if s.ratio() != 1:
+            diff = difflib.unified_diff(svn_sql_text,sql_text)
+            logger.debug('objects are not equal (ration %f): ' + svn_file_full_name,s.ratio())
+            logger.debug(''.join(diff),)
             svn.commit_file(svncfg, schema_name.lower(), object_type, object_name, sql_text, svn_comment)
     else:
         logger.debug('created %s',svn_file_full_name)

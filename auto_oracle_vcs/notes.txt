@@ -1,3 +1,10 @@
+*** 2015-04-12 *** 2h
+
+    -- TODO track schemas from list
+	- deply into test env - oracle, python
+	allow only LABAS, SP1 schema sync
+
+
 d = dict(p1=1, p2=2)
 def f2(p1,p2):
     print p1, p2
@@ -10,14 +17,14 @@ http://victorlin.me/posts/2012/08/26/good-logging-practice-in-python
 
 *** 2015-04-05 *** 2h
 + before post to svn do python diff
-- post to github
++ post to github
 + svn update
 
 *** 2015-03-26 - 2015-04-01 ***
 
 4h
 + add logs + rotate logs
-+svn user ora_svn
++ svn user ora_svn
 + use password from config file - settings
 
 TODO idea: montitor critical test env packages
