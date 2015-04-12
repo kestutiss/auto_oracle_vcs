@@ -57,3 +57,27 @@ print ''.join(diff),
 #        print diff.next(),
 #except:
 #    pass
+
+def test_dict (d):
+    for listx in table['row'] :
+        print listx[0], listx[1]
+
+list1=[1,2,3,4,5]
+list2=[123,234,456]
+d={'a':[],'b':[]}
+d['a'].append(list1)
+d['a'].append(list2)
+print d['a']
+
+row1 = ['sm','procedure','xxx']
+row2 = ['labas','trigger','yyy']
+
+table={'row':[]}
+table['row'].append(row1)
+table['row'].append(row2)
+#print table['a']
+
+print table
+test_dict(table)
+
+

@@ -1,3 +1,8 @@
+d = dict(p1=1, p2=2)
+def f2(p1,p2):
+    print p1, p2
+f2(**d)
+
 *** 2015-04-05 *** 2h
 http://pydoc.org/2.5.1/difflib.html
 http://victorlin.me/posts/2012/08/26/good-logging-practice-in-python

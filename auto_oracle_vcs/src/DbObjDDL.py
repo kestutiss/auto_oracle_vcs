@@ -27,19 +27,35 @@ class DbObjDDL(object):
     
         return clob_res[0][0].read()
     
-    def getObjects (self):
-        ddlq = []
+    def get_objects (self):
+        #ddlq = []
         
         l_cur = self.__cursor.var(odb.CURSOR)
-        l_query = self.__cursor.callproc("ddl_svn_mng.get_pending_changes",[l_cur])
-        
+        l_query = self.__cursor.callproc("ddl_svn_mng.get_objects",[l_cur])
         l_results = l_query[0]
-
+        
+        cursor_dict = {}
+        
         for row in l_results:
-            ddlq.append(row[0])
+            if not bool(cursor_dict):
+                cursor_dict = {'row':[]} 
+                  
+            result = [row[0],row[1],row[2],row[3]]
+            cursor_dict['row'].append(result)
+            #schema_name = row[0]
+            #object_name = row[1]
+            #object_type = row[2]
+            #ddl_object_type = row[3]
+            
+            
         
-        self.logger.debug('getPendingDDLQueue, %s',ddlq)
+             
+
+        #for row in l_results:
+            #ddlq.append(row[0])
         
-        return ddlq
+        #self.logger.debug('getObjects, %s',ddlq)
+        
+        return cursor_dict
                 
         
