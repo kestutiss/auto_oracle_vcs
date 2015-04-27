@@ -1,3 +1,7 @@
+grant select any dictionary to kestas;
+
+
+
 CREATE OR REPLACE TRIGGER ddl_log_alter_trg BEFORE ALTER ON DATABASE
   DECLARE
   BEGIN

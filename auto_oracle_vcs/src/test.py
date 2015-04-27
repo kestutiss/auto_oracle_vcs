@@ -80,4 +80,8 @@ table['row'].append(row2)
 print table
 test_dict(table)
 
+user = None
+ip = '1'
 
+svn_comment = '<change><user>%s</user><ip>%s</ip>' % (user, ip)
+print svn_comment

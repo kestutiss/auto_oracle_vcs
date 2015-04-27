@@ -3,6 +3,7 @@
     -- TODO track schemas from list
 	- deply into test env - oracle, python
 	allow only LABAS, SP1 schema sync
+	https://github.com/kestutiss/auto_oracle_vcs.git
 
 
 d = dict(p1=1, p2=2)
@@ -85,8 +86,8 @@ TODO review:
 
 *** 2014-11-25 ***
 
-* change svn user - auto login use
-* extract last comment to svn
-* oracle trigger - log all database ddl
-* rotate log
++* change svn user - auto login use
++* extract last comment to svn
++* oracle trigger - log all database ddl
++* rotate log
 * comment py code block

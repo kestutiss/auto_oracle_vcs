@@ -6,8 +6,6 @@ Created on 2014 gruod. 12
 
 import cx_Oracle as odb
 
-    # TODO provide type MySQL/ Oracle implement interface accordingly
-
 
 class DbObjDDL(object):
     def __init__(self, dbUser, dbPasswd, dbIPAddress, dbSID, dbPort):
@@ -28,7 +26,6 @@ class DbObjDDL(object):
         return clob_res[0][0].read()
     
     def get_objects (self):
-        #ddlq = []
         
         l_cur = self.__cursor.var(odb.CURSOR)
         l_query = self.__cursor.callproc("ddl_svn_mng.get_objects",[l_cur])
@@ -42,19 +39,6 @@ class DbObjDDL(object):
                   
             result = [row[0],row[1],row[2],row[3]]
             cursor_dict['row'].append(result)
-            #schema_name = row[0]
-            #object_name = row[1]
-            #object_type = row[2]
-            #ddl_object_type = row[3]
-            
-            
-        
-             
-
-        #for row in l_results:
-            #ddlq.append(row[0])
-        
-        #self.logger.debug('getObjects, %s',ddlq)
         
         return cursor_dict
                 
