@@ -8,17 +8,14 @@ Created on 2014 gruod. 12
 if __name__ == '__main__':
     pass
 
-#import getopt
 import os
-import sys
-#import logging as log, logging.handlers
+import sys, getopt
 from logger import Logger
 from DbDDLLogGw import DbDDLLogGw
-#import svngw
 from PySVNGw import PySVNGw
 import datetime
 import re
-from settings import svncfg
+from settings import database
  
 import ConfigParser
 import difflib
@@ -30,17 +27,46 @@ def nullstrip(s):
     except ValueError:  # No nulls were found, which is okay.
         pass
     return s
-    
-#sys.exit(0)    
+
+def usage():
+    print ("Usage: %s --mode=TEST --database=MOON" % sys.argv[0])
+    sys.exit(2)
+
+#sys.exit(0)
+
+print 'Number of arguments:', len(sys.argv), 'arguments.'
+print 'Argument List:', str(sys.argv)
+print 'ARGV      :', sys.argv[1:]
+
+database_name = ''
+svn_trunk_type = ''
+
+try:                                
+    opts, args = getopt.getopt(sys.argv[1:], 'd:m' , ['mode=', 'database='])
+    print 'OPTIONS   :', opts
+except getopt.GetoptError:          
+    usage()                                           
+for opt, arg in opts:                
+    if opt in ("-m", "--mode"):      
+        svn_trunk_type = arg
+    elif opt in ("-d", "--database"):              
+        database_name = arg   
+    else:
+        usage()
+
+
+print 'svn_trunk_type ' + svn_trunk_type         
+        
+if database == '' or svn_trunk_type == '':
+    usage() 
  
+
 # Configuring
 scriptdir = os.path.dirname(os.path.realpath(__file__))
 config = ConfigParser.SafeConfigParser()
 config.read(os.path.join(scriptdir, '..')+'/conf/auto_oracle_vcs.cfg')
 
-#TODO do test iternation, then prod       
-svn_trunk_type = 'TEST'  # todo two iterations PROD + TEST
-dbcfg = 'ORACLE_DB_'+ svn_trunk_type
+dbcfg = database_name + "_" + svn_trunk_type
 
 os.environ['ORACLE_HOME'] = config.get(dbcfg,'ORACLE_HOME')
 os.environ['LD_LIBRARY_PATH'] = os.environ['ORACLE_HOME'] + "/lib"
@@ -50,7 +76,7 @@ logger = Logger(__name__).get()
 logger.debug('Checkout SVN')
 
 svn = PySVNGw()
-svn.update(svncfg['WORK_PATH'])
+svn.update(config.get(dbcfg,'SVN_WORK_PATH'))
 
 # get source code   
 ddl = DbDDLLogGw(config.get(dbcfg,'username'), config.get(dbcfg,'password'), config.get(dbcfg,'sid'), config.get(dbcfg,'ip'), config.get(dbcfg,'port'))
@@ -81,7 +107,7 @@ for i in ddl_q:
         
     logger.debug("svn_comment:\n" + svn_comment)
     
-    svn_file_full_name = svn.get_file_full_name('TRUNK_'+svn_trunk_type, ddl.objectSchemaName.lower(), ddl.objectType, ddl.objectName)
+    svn_file_full_name = svn.get_file_full_name(dbcfg['SVN_WORK_PATH'], ddl.objectSchemaName.lower(), ddl.objectType, ddl.objectName)
     logger.debug("full path to file: " + svn_file_full_name)
         
     if os.path.exists(svn_file_full_name):    
@@ -92,7 +118,7 @@ for i in ddl_q:
     else:
         logger.debug("file is new:" + svn_file_full_name)
 
-    svn.commit_file('TRUNK_'+svn_trunk_type, ddl.objectSchemaName, ddl.objectType, ddl.objectName, nullstrip(ddl.sqlText), svn_comment)
+    svn.commit_file(config.get(dbcfg,'SVN_WORK_PATH'), ddl.objectSchemaName, ddl.objectType, ddl.objectName, nullstrip(ddl.sqlText), svn_comment)
     
     ddl.commit(ddl.ddlID);    
     logger.debug("svn commits done, exit") 

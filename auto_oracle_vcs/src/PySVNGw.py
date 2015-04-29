@@ -39,19 +39,22 @@ class PySVNGw(object):
     def update(self,work_path):
         self.client.update(work_path, True)
             
-    def get_file_full_name(self, svnRepoType, schemaName, objectType, objectName):
-        return self.config.get('SVN',svnRepoType) + '/' + schemaName.lower() + '/' + self.config.get('object_local_location_path',objectType)  + '/' + objectName + '.sql'
+    def get_file_full_name(self, path, schemaName, objectType, objectName):
+        return path + '/' + schemaName.lower() + '/' + self.config.get('object_local_location_path',objectType)  + '/' + objectName + '.sql'
            
-    def commit_file(self, svnTrunkType, schemaName, objectType, objectName, sqlText, comment):
+    def commit_file(self, svnRepoPath, schemaName, objectType, objectName, sqlText, comment):
         
         addPathToSVN = None
          
-        svnRepoPath = self.config.get('SVN',svnTrunkType)
+        #svnRepoPath = self.config.get('SVN',svnTrunkType)
         schemaPath = svnRepoPath + '/' +  schemaName
-        packagesPath = self.config.get('SVN',svnTrunkType) + '/' + schemaName.lower() + '/' + 'packages'
+        #packagesPath = self.config.get('SVN',svnTrunkType) + '/' + schemaName.lower() + '/' + 'packages'
+        packagesPath = svnRepoPath + '/' + schemaName.lower() + '/' + 'packages'
 
         # TODO remove duplicate
-        fileName = self.config.get('SVN',svnTrunkType) + '/' + schemaName.lower() + '/' + self.config.get('object_local_location_path',objectType)  + '/' + objectName + '.sql'
+        #fileName = self.config.get('SVN',svnTrunkType) + '/' + schemaName.lower() + '/' + self.config.get('object_local_location_path',objectType)  + '/' + objectName + '.sql'
+        fileName = svnRepoPath + '/' + schemaName.lower() + '/' + self.config.get('object_local_location_path',objectType)  + '/' + objectName + '.sql'
+        
         self.logger.debug('fileName %s',fileName)
            
         filePath = os.path.dirname(fileName)
